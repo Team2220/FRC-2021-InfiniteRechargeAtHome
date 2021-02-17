@@ -28,10 +28,9 @@ public class DriveTrain extends SubsystemBase {
                                                                                                                
     DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading());
 
-    SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.268, 1.83, 2.44);// kv,ka,ks values in robot
-                                                                                       // characterization data logger
-    PIDController leftPidController = new PIDController(9.95, 0, 0);// robot characteriarion..
-    PIDController rightPidController = new PIDController(9.95, 0, 0);
+    SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.136, 2.66, 0.465);
+    PIDController leftPidController = new PIDController(2.41, 0, 0);
+    PIDController rightPidController = new PIDController(2.41, 0, 0);
 
     public DriveTrain() {
         leftFollower.follow(leftLeader);
