@@ -73,6 +73,8 @@ public class DriveTrain extends SubsystemBase {
     public void setOutput(double leftVolts, double rightVolts) {
         leftLeader.set(leftVolts / 12);
         rightLeader.set(rightVolts / 12);
+        System.out.println("leftVolts: " + leftVolts + " rightvolts: " + rightVolts);
+        
     }
 
     public PIDController getLeftPIDController() {

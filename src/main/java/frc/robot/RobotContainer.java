@@ -42,12 +42,11 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
       Arrays.asList(new Pose2d(), new Pose2d(3.5, 3.5, new Rotation2d())),
        config
-       
     );
    
 
 
-    RamseteCommand command = new RamseteCommand(
+    RamseteCommand command = new DebugRamseteCommand(
       trajectory, 
       driveTrain::getPose, 
       new RamseteController(2.0, 0.7),
@@ -60,7 +59,10 @@ public class RobotContainer {
       driveTrain
       );
 
-    return command;
+    return command.andThen(()->{ 
+      driveTrain.setOutput(0, 0);
+    }, 
+    driveTrain);
   }
 
   // private final ExampleCommand m_autoCommand = new
