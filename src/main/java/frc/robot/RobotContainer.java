@@ -39,15 +39,13 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
     config.setKinematics(driveTrain.getKinematics());
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
+      Arrays.asList(new Pose2d(), new Pose2d(3.5, 3.5, new Rotation2d())),
+       config
+       
+    );
+   
 
-    String trajectoryJSON = "Paths/testGalacticA.wpilib.json";
-    Trajectory trajectory = new Trajectory();
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
 
     RamseteCommand command = new RamseteCommand(
       trajectory, 
