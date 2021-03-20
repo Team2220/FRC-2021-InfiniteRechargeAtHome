@@ -40,13 +40,13 @@ public class DebugRamseteCommand extends RamseteCommand {
     public void execute() {
         // TODO Auto-generated method stub
         super.execute();
-        System.out.println("ABCDEFEXECUTE!!!!!!!!!!!!!!!!!!!!!!*****************" );
+      //  System.out.println("ABCDEFEXECUTE!!!!!!!!!!!!!!!!!!!!!!*****************" );
     }
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
         super.initialize();
-        System.out.println("ABCDEFINITIALIZE!!!!!!!!!!!!!!!!!!!!!!*****************!!!**" );
+     //   System.out.println("ABCDEFINITIALIZE!!!!!!!!!!!!!!!!!!!!!!*****************!!!**" );
     }
     @Override
     public void end(boolean interrupted) {

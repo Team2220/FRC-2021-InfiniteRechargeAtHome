@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -73,7 +74,7 @@ public class DriveTrain extends SubsystemBase {
     public void setOutput(double leftVolts, double rightVolts) {
         leftLeader.set(leftVolts / 12);
         rightLeader.set(rightVolts / 12);
-        System.out.println("leftVolts: " + leftVolts + " rightvolts: " + rightVolts);
+        //System.out.println("leftVolts: " + leftVolts + " rightvolts: " + rightVolts);
         
     }
 
@@ -91,7 +92,40 @@ public class DriveTrain extends SubsystemBase {
             getHeading(),
             leftLeader.getEncoder().getPosition() / gearRatio * Units.inchesToMeters(circumference),
             rightLeader.getEncoder().getPosition() / gearRatio * Units.inchesToMeters(circumference)
+            
         );
+      // System.out.println("Gyro: " + -gyro.getAngle());
+
+    
+    }
+    public void resetGyro(){
+        System.out.println("odometry: " + pose);
+        System.out.println(" Left encoder: " + leftLeader.getEncoder().getPosition());
+        System.out.println(" right encoder: " + rightLeader.getEncoder().getPosition());
+
+
+        gyro.reset();
+        leftLeader.getEncoder().setPosition(0);
+        rightLeader.getEncoder().setPosition(0);
+               odometry.resetPosition(new Pose2d(), new Rotation2d());
+              System.out.println("YEEEEEHAAAAAAAAAAAWWWWWWWWWWWWWWWWWWWW!!!!!!!");
+              periodic();
+              System.out.println("odometry: " + pose);
+              System.out.println(" Left encoder: " + leftLeader.getEncoder().getPosition());
+              System.out.println(" right encoder: " + rightLeader.getEncoder().getPosition());
+
+    }
+
+    public void setIdleMode(IdleMode mode ){
+        leftLeader.setIdleMode(mode);
+        rightLeader.setIdleMode(mode);
+        
+        //followers don't automatically follow the leaders
+        //they're sentient
+        leftFollower.setIdleMode(mode);
+        rightFollower.setIdleMode(mode);
+
+
     }
 
 }

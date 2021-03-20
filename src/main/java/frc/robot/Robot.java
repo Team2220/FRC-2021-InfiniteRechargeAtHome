@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -56,6 +58,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.driveTrain.setIdleMode(IdleMode.kCoast);
   }
 
   @Override
@@ -68,7 +71,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    m_robotContainer.driveTrain.setIdleMode(IdleMode.kBrake);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -87,6 +93,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_robotContainer.driveTrain.setIdleMode(IdleMode.kCoast);
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -101,10 +109,12 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 }

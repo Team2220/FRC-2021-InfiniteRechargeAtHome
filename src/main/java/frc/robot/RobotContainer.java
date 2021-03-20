@@ -22,7 +22,11 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -34,16 +38,25 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain driveTrain = new DriveTrain();
+  public final DriveTrain driveTrain = new DriveTrain();
 
   public Command getAutonomousCommand() {
     TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
     config.setKinematics(driveTrain.getKinematics());
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
-      Arrays.asList(new Pose2d(), new Pose2d(3.5, 3.5, new Rotation2d())),
+      Arrays.asList(new Pose2d(), new Pose2d(1, 1, new Rotation2d(Math.PI))),
        config
     );
    
+    FunctionalCommand runCommand = new FunctionalCommand(
+      ()->{driveTrain.resetGyro();}, 
+      ()->{},
+      (interrupted)->{},
+      ()->{return true;},
+      driveTrain
+    );
+
+    WaitCommand waitCommand = new WaitCommand(2);
 
 
     RamseteCommand command = new DebugRamseteCommand(
@@ -59,7 +72,7 @@ public class RobotContainer {
       driveTrain
       );
 
-    return command.andThen(()->{ 
+    return (runCommand).andThen(waitCommand).andThen(command).andThen(()->{ 
       driveTrain.setOutput(0, 0);
     }, 
     driveTrain);
