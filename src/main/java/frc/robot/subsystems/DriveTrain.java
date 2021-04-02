@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -21,6 +22,8 @@ public class DriveTrain extends SubsystemBase {
 
     CANSparkMax leftFollower = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax rightFollower = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public TalonSRX talon = new TalonSRX(5);
+
 
     AHRS gyro = new AHRS();
     Pose2d pose;

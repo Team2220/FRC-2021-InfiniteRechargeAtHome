@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -41,12 +43,32 @@ public class RobotContainer {
   public final DriveTrain driveTrain = new DriveTrain();
 
   public Command getAutonomousCommand() {
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
+    System.out.println("Starting Trajectory Generation");
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(7), Units.feetToMeters(7));
     config.setKinematics(driveTrain.getKinematics());
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
-      Arrays.asList(new Pose2d(), new Pose2d(1, 1, new Rotation2d(Math.PI))),
+      // Arrays.asList(new Pose2d(), new Pose2d(2, -2, new Rotation2d(Units.degreesToRadians(270)))),
+       Arrays.asList(
+         new Pose2d(), 
+         new Pose2d(2.318, -2.281, new Rotation2d(Units.degreesToRadians(315))),
+         new Pose2d(3.863, -3.023, new Rotation2d(Units.degreesToRadians(67.5))),
+         new Pose2d(4.668, -0.727, new Rotation2d(Units.degreesToRadians(0))),
+         new Pose2d(8.627, -0.727, new Rotation2d(Units.degreesToRadians(0)))
+       ),
        config
     );
+
+    System.out.println("Finishing Trajectory Generation");
+
+
+    // String trajectoryJSON = "Paths/Test.wpilib.json";
+    // Trajectory trajectory = new Trajectory();
+    // try {
+    //   Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    //   trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    // } catch (IOException ex) {
+    //   DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    // }
    
     FunctionalCommand runCommand = new FunctionalCommand(
       ()->{driveTrain.resetGyro();}, 
@@ -56,7 +78,7 @@ public class RobotContainer {
       driveTrain
     );
 
-    WaitCommand waitCommand = new WaitCommand(2);
+    WaitCommand waitCommand = new WaitCommand(0);
 
 
     RamseteCommand command = new DebugRamseteCommand(
@@ -71,11 +93,16 @@ public class RobotContainer {
       driveTrain::setOutput, 
       driveTrain
       );
-
+      FunctionalCommand testCommand = new FunctionalCommand(
+        ()->{}, 
+        ()->{driveTrain.talon.set(TalonSRXControlMode.PercentOutput, 0.8);},
+        (interrupted)->{driveTrain.talon.set(TalonSRXControlMode.PercentOutput, 0);},
+        ()->{return false;}
+      );
     return (runCommand).andThen(waitCommand).andThen(command).andThen(()->{ 
       driveTrain.setOutput(0, 0);
     }, 
-    driveTrain);
+    driveTrain).raceWith(testCommand);
   }
 
   // private final ExampleCommand m_autoCommand = new
