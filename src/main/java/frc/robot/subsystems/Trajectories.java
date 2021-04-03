@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 
 public class Trajectories {
-    public final Trajectory testTrajectory = trajectoryFromPath("output/Test.wpilib.json");
+    public final Trajectory testTrajectory = trajectoryFromPath("output/Barrell.wpilib.json");
+   // public final Trajectory testTrajectory = trajectoryFromPath("output/Bounce.wpilib.json");
+   // public final Trajectory testTrajectory = trajectoryFromPath("output/Slalom.wpilib.json");
+
 
     public static Trajectory trajectoryFromPath(String trajectoryJSON){
         Trajectory trajectory = new Trajectory();
