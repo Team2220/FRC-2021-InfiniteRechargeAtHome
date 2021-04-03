@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Trajectories;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -42,36 +43,30 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   public final DriveTrain driveTrain = new DriveTrain();
+  public final Trajectories trajectories = new Trajectories();
 
   public Command getAutonomousCommand() {
-    System.out.println("Starting Trajectory Generation");
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
-    config.setKinematics(driveTrain.getKinematics());
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
-      // Arrays.asList(new Pose2d(), new Pose2d(2, -2, new Rotation2d(Units.degreesToRadians(270)))),
-       Arrays.asList(
-         new Pose2d(0, -2.281, new Rotation2d(Units.degreesToRadians(0))), 
-         new Pose2d(2.318, -2.281, new Rotation2d(Units.degreesToRadians(0)))
-        //  new Pose2d(3.863, -3.023, new Rotation2d(Units.degreesToRadians(67.5))),
-        //  new Pose2d(4.668, -0.727, new Rotation2d(Units.degreesToRadians(0))),
-        //  new Pose2d(8.627, -0.727, new Rotation2d(Units.degreesToRadians(0)))
-       ),
-       config
-    );
- Transform2d transform = new Transform2d(trajectory.getInitialPose(), new Pose2d());
+//     System.out.println("Starting Trajectory Generation");
+//     TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
+//     config.setKinematics(driveTrain.getKinematics());
+//     Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
+//       // Arrays.asList(new Pose2d(), new Pose2d(2, -2, new Rotation2d(Units.degreesToRadians(270)))),
+//        Arrays.asList(
+//          new Pose2d(0, -2.281, new Rotation2d(Units.degreesToRadians(0))), 
+//          new Pose2d(2.318, -2.281, new Rotation2d(Units.degreesToRadians(0)))
+//         //  new Pose2d(3.863, -3.023, new Rotation2d(Units.degreesToRadians(67.5))),
+//         //  new Pose2d(4.668, -0.727, new Rotation2d(Units.degreesToRadians(0))),
+//         //  new Pose2d(8.627, -0.727, new Rotation2d(Units.degreesToRadians(0)))
+//        ),
+//        config
+//     );
+ 
+//     System.out.println("Finishing Trajectory Generation");
+
+Trajectory trajectory = trajectories.testTrajectory;
+Transform2d transform = new Transform2d(trajectory.getInitialPose(), new Pose2d());
 trajectory = trajectory.transformBy(transform);
-    System.out.println("Finishing Trajectory Generation");
 
-
-    // String trajectoryJSON = "Paths/Test.wpilib.json";
-    // Trajectory trajectory = new Trajectory();
-    // try {
-    //   Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-    //   trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    // } catch (IOException ex) {
-    //   DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    // }
-   
     FunctionalCommand runCommand = new FunctionalCommand(
       ()->{driveTrain.resetGyro();}, 
       ()->{},
@@ -97,7 +92,7 @@ trajectory = trajectory.transformBy(transform);
       );
       FunctionalCommand testCommand = new FunctionalCommand(
         ()->{}, 
-        ()->{driveTrain.talon.set(TalonSRXControlMode.PercentOutput, 0.8);},
+        ()->{driveTrain.talon.set(TalonSRXControlMode.PercentOutput, 0);},
         (interrupted)->{driveTrain.talon.set(TalonSRXControlMode.PercentOutput, 0);},
         ()->{return false;}
       );
