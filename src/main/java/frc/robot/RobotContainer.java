@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -44,20 +45,21 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     System.out.println("Starting Trajectory Generation");
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(7), Units.feetToMeters(7));
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
     config.setKinematics(driveTrain.getKinematics());
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory( 
       // Arrays.asList(new Pose2d(), new Pose2d(2, -2, new Rotation2d(Units.degreesToRadians(270)))),
        Arrays.asList(
-         new Pose2d(), 
-         new Pose2d(2.318, -2.281, new Rotation2d(Units.degreesToRadians(315))),
-         new Pose2d(3.863, -3.023, new Rotation2d(Units.degreesToRadians(67.5))),
-         new Pose2d(4.668, -0.727, new Rotation2d(Units.degreesToRadians(0))),
-         new Pose2d(8.627, -0.727, new Rotation2d(Units.degreesToRadians(0)))
+         new Pose2d(0, -2.281, new Rotation2d(Units.degreesToRadians(0))), 
+         new Pose2d(2.318, -2.281, new Rotation2d(Units.degreesToRadians(0)))
+        //  new Pose2d(3.863, -3.023, new Rotation2d(Units.degreesToRadians(67.5))),
+        //  new Pose2d(4.668, -0.727, new Rotation2d(Units.degreesToRadians(0))),
+        //  new Pose2d(8.627, -0.727, new Rotation2d(Units.degreesToRadians(0)))
        ),
        config
     );
-
+ Transform2d transform = new Transform2d(trajectory.getInitialPose(), new Pose2d());
+trajectory = trajectory.transformBy(transform);
     System.out.println("Finishing Trajectory Generation");
 
 
